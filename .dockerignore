@@ -1,0 +1,5 @@
+*
+!shortener
+!test
+!poetry.lock
+!pyproject.toml

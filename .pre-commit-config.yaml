@@ -1,0 +1,72 @@
+default_language_version:
+  python: python3.8
+
+default_stages: [commit, manual]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^.*\.md$
+      - id: end-of-file-fixer
+      - id: debug-statements
+      - id: no-commit-to-branch
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-merge-conflict
+
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.15.0
+    hooks:
+      - id: gitlint
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.25.0
+    hooks:
+      - id: yamllint
+
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.26.0
+    hooks:
+      - id: markdownlint
+        language_version: system
+
+  - repo: https://github.com/timothycrosley/isort
+    rev: 5.7.0
+    hooks:
+      - id: isort
+
+  - repo: https://github.com/ambv/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+
+  - repo: https://github.com/PyCQA/pylint
+    rev: pylint-2.6.0
+    hooks:
+      - id: pylint
+        additional_dependencies: [".[pyproject]"]
+        exclude: ^(docs/).*$
+        # Disabled import-error as it may run out of environment with deps.
+        args: ["--disable=import-error"]
+
+  - repo: https://github.com/PyCQA/pydocstyle
+    rev: 5.1.1
+    hooks:
+      - id: pydocstyle
+        # D100-D107 ignore missing docstrings
+        # D203 disabled in favor of D211
+        # D213 disabled in favor of D212
+        # D406, D407, D408, D409, D413 disabled because we use Google convention.
+        args: ["--ignore=D100,D101,D102,D103,D104,D105,D106,D107,D203,D213,D406,D407,D408,D409"]
+
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.6.2
+    hooks:
+      - id: bandit
+        exclude: test/
+        # B101 - Test for use of assert - we don't generate pyo files
+        args: ["--skip=B101"]
