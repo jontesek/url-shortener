@@ -11,7 +11,7 @@ The service is then accessible on URL `http://0.0.0.0:8080` and you can use two 
 * GET `/shorten?url=<url>`: generate short URL
     * example: `http://0.0.0.0:8080/shorten?url=https://www.engadget.com/ps5-sales-tma-113435891.html`
 * GET `/<url_id>`: get long URL (if service deployed for real, redirect would happen)
-    * example: `http://localhost:8080/sV21`
+    * example: `http://0.0.0.0:8080/sV21`
 
 More details are available in the generated [Swagger docs](http://0.0.0.0:8080/docs).
 
