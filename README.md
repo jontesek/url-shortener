@@ -87,20 +87,29 @@ I tried to use `async` where possible:
 * `Redis`: `aioredis` package, use of `await` when communicating with Redis
 * `S3`: `boto3` package with needed methods decorated to be async
 
-I use `uvicorn` web server - for production is recommended `gunicorn` (easy to add). We can set number of workers via `WEB_CONCURRENCY` env (it's not valid with reload option for local development). 
+I use `uvicorn` web server - for production is recommended `gunicorn` (prepared in `docker-compose.yaml`). We can set number of workers via `WEB_CONCURRENCY` env (it's not valid with reload option for local development). 
 
 ### Load testing
+
+#### Setup
+
+Edit `docker-compose.yaml`:
+* uncomment env `LOAD_TEST=1`: disable logging
+* comment env `DEBUG=1`: for FastAPI
+* command: uncomment `--no-access-log` for `uvicorn`
 
 We used [Locust](https://locust.io/) library to load test the app. 
 
 1. `pip3 install locust`
 2. `locust`
 
-* First test: 100 concurrent users for `/redirect` endpoint: 300 rps, 300ms median response time
-* Second test: 1000 concurrent users for `/redirect` endpoint: 350 rps, but very high response time (5s)
+#### Results
 
-Uvicorn server was better than gunicorn.
+* 100 concurrent users for `/redirect` endpoint: 600 rps, 150ms median response time
+* 1000 concurrent users for `/redirect` endpoint: 500 rps, 1500ms median response time
 
-So the results are not great - however they were run on Macbook Pro 13" - not a very powerful machine. Also Locust was run on the same machine and could drain some resources.
+The results for 1000 users are not very good - there is probably a bottleneck, but I'm not sure where.
 
-There might be some problems inside the app -> needs more debugging. But I can't see any error in logs.
+Tests were run on Macbook Pro 13" - not a very powerful machine. Also Locust was run on the same machine and could drain some resources.
+
+And for the record, Uvicorn server was better than gunicorn.

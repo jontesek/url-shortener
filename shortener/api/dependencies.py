@@ -1,5 +1,5 @@
+import aioredis
 import boto3
-from aioredis import create_redis_pool
 
 from ..clients.s3 import S3Client
 from ..settings import REDIS_URL, S3_BUCKET, S3_CONFIG, URL_S3_PATH
@@ -13,7 +13,7 @@ async def get_shortener() -> Shortener:
     global shortener
     if not shortener:
         print("creating shortener")
-        _redis_client = await create_redis_pool(REDIS_URL)
+        _redis_client = await aioredis.create_redis_pool(REDIS_URL, encoding="utf-8")
         _boto_client = boto3.client(
             "s3",
             endpoint_url=S3_CONFIG["endpoint"],

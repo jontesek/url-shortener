@@ -8,13 +8,14 @@ S3_CONFIG = {
 }
 S3_BUCKET = os.getenv("S3_BUCKET", "shortener")
 REDIS_URL = os.getenv("REDIS_URL")
-REDIRECT_BASE_URL = os.getenv("REDIRECT_BASE_URL", "http://localhost:8080")
+REDIRECT_BASE_URL = os.getenv("REDIRECT_BASE_URL", "http://0.0.0.0:8080")
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 DD_HOSTNAME = os.getenv("DD_HOSTNAME")
 DD_TRACER_PORT = os.getenv("DD_TRACER_PORT", "8126")
 APP_NAME = os.getenv("APP_NAME", "shortener")
 ENVIRONMENT = os.getenv("ENVIRONMENT")
 DEBUG = os.getenv("DEBUG")
+LOAD_TEST = os.getenv("LOAD_TEST")
 
 local = ENVIRONMENT == "local"
 

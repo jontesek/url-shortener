@@ -1,7 +1,7 @@
 import re
 
 import structlog
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 
 from ...settings import URL_REGEX
 from ..dependencies import get_shortener
@@ -28,4 +28,4 @@ async def shorten(url: str):
     shortener = await get_shortener()
     short_url = await shortener.shorten(url)
     LOG.info("api.shorten.done", short_url=short_url)
-    return short_url
+    return Response(content=short_url, media_type="text/plain")
