@@ -1,9 +1,10 @@
 import re
 
 import structlog
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Response
 
 from ...settings import URL_ID_REGEX
+from ...shortener import Shortener
 from ..dependencies import get_shortener
 
 LOG = structlog.get_logger(__name__)
@@ -30,11 +31,10 @@ responses = {
     responses=responses,
     summary="Get long URL from the short URL",
 )
-async def redirect(url_id: str):
+async def redirect(url_id: str, shortener: Shortener = Depends(get_shortener)):
     LOG.info("api.redirect.received", url_id=url_id)
     if not re.match(URL_ID_REGEX, url_id):
         raise HTTPException(status_code=422, detail="Invalid URL ID")
-    shortener = await get_shortener()
     long_url = await shortener.get_long_url(url_id)
     LOG.info("api.redirect.done", url_id=url_id, long_url=long_url)
     if long_url:
